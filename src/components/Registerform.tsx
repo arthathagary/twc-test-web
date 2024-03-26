@@ -3,7 +3,15 @@ import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import axios from "axios";
 
-export default function Registerform() {
+interface RegisterFormProps {
+  isBtnClicked: boolean;
+  setIsBtnClicked: (value: boolean) => void;
+}
+
+export default function Registerform({
+  isBtnClicked,
+  setIsBtnClicked,
+}: RegisterFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
@@ -73,26 +81,25 @@ export default function Registerform() {
   };
   return (
     <MaxWidthWrapper>
-      <div className="w-full max-w-md text-white">
-        <h1 className="font-bold text-5xl mb-8">Register Now!</h1>
-        {/* <p className="text-2xl mb-8">Welcome to our contacts portal</p> */}
+      <div className="w-full max-w-[477px] text-white">
+        <h1 className="font-bold text-heading mb-8">Register Now!</h1>
         <div className="flex flex-col gap-4 text-black">
           <input
-            className="rounded-full px-4 py-2 w-full text-black"
+            className="rounded-full h-[55px] px-4 py-2 w-full text-black mb-4"
             value={email}
             onChange={handleEmail}
             placeholder="email"
           />
           {errors.email && <p className="text-red-500">{errors.email}</p>}
           <input
-            className="rounded-full px-4 py-2 w-full text-black"
+            className="rounded-full h-[55px] px-4 py-2 w-full text-black mb-4"
             value={password}
             onChange={handlePassword}
             placeholder="create password"
           />
           {errors.password && <p className="text-red-500">{errors.password}</p>}
           <input
-            className="rounded-full px-4 py-2 w-full text-black mb-2"
+            className="rounded-full h-[55px] px-4 py-2 w-full text-black mb-8"
             value={confirmPassword}
             onChange={handleConfirmPassword}
             placeholder="confirm password"
@@ -109,11 +116,18 @@ export default function Registerform() {
         <div className="flex flex-col items-start gap-8">
           <button
             onClick={handleClick}
-            className=" border-white border-2 rounded-full px-6 py-2 "
+            className="text-btnTxt border-white border-2 rounded-full px-6 py-2 "
           >
             Register
           </button>
-          <p>Back to login</p>
+          <p
+            className="text-btnTxt"
+            onClick={() => {
+              setIsBtnClicked(false);
+            }}
+          >
+            Back to login
+          </p>
         </div>
       </div>
     </MaxWidthWrapper>

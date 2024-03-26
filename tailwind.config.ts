@@ -16,6 +16,11 @@ const config: Config = {
       colors: {
         "bg-primary": "#093F46",
       },
+      fontSize: {
+        heading: "50px",
+        para: "35px",
+        btnTxt: "25px",
+      },
     },
   },
   plugins: [],
