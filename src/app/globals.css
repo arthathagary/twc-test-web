@@ -17,6 +17,13 @@
 }
 
 body {
+  background-image: url("../../public/assets/images/bg_img.png");
+}
+
+.circle {
+  height: 100vh;
+  background: #093f46;
+  clip-path: circle(100vh at 5% 50%);
 }
 
 @layer utilities {
