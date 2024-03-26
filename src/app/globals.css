@@ -23,9 +23,14 @@ body {
 .circle {
   height: 100vh;
   background: #093f46;
-  clip-path: circle(100vh at 5% 50%);
+  clip-path: circle(100vh at 23% 100%);
 }
 
+.oval {
+  height: 100vh;
+  background: #093f46;
+  clip-path: circle(300vh at 50% 60%);
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;
