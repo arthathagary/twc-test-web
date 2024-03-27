@@ -5,7 +5,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import axios from "axios";
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 
-export default function NewContact() {
+export default function Contacts() {
   const [contact, setContact] = useState({
     fullname: "",
     email: "",
@@ -57,63 +57,37 @@ export default function NewContact() {
     <>
       <div className=" min-h-screen bg-bg-primary rounded-tr-[200px] rounded-bl-[200px] relative">
         <MaxWidthWrapper>
-          <Logo className="pt-[72px]" />
-          <ContactsPortal />
-          <div className="flex flex-col justify-center">
-            <h1 className="text-heading font-bold text-white mt-8">
-              New Contact
-            </h1>
-            <div className="grid grid-cols-2 gap-6  items-center justify-center">
-              <input
-                className="rounded-full h-[55px] px-4 py-2 w-full text-black mb-4"
-                value={contact.fullname}
-                onChange={handleName}
-                placeholder="full name"
-              />
-              <input
-                className="rounded-full h-[55px] px-4 py-2 w-full text-black mb-4"
-                value={contact.email}
-                onChange={handleEmail}
-                placeholder="email"
-              />
-              <input
-                className="rounded-full h-[55px] px-4 py-2 w-full text-black mb-4"
-                value={contact.phoneNumber}
-                onChange={handlePhoneNumber}
-                placeholder="phone number"
-              />
-              <div className="h-[55px] text-white text-btnTxt space-x-10 flex">
-                <label>gender</label>
-                <div className="space-x-4">
-                  <input
-                    type="radio"
-                    checked={contact.gender === "male"}
-                    value="male"
-                    name="gender"
-                    onChange={handleGender}
-                  />
-                  <label>male</label>
-                </div>
-                <div className="space-x-4">
-                  <input
-                    type="radio"
-                    checked={contact.gender === "female"}
-                    value="female"
-                    name="female"
-                    onChange={handleGender}
-                  />
-                  <label>female</label>
-                </div>
-              </div>
-            </div>
-
+          <div className="flex  items-center justify-between pt-[72px]">
+            <Logo className="" />
             <div>
               <button
                 onClick={handleClick}
                 className="text-btnTxt border-2 border-white rounded-full px-6 py-2 mt-8 text-white"
               >
-                add your first contact
+                add your contact
               </button>
+            </div>
+          </div>
+
+          <ContactsPortal />
+          <div className="relative bg-white rounded-[30px] h-[316px] w-full">
+            <div className="absolute left-4 top-4 overflow-y-auto h-[316px] w-full">
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
+              <p>...</p>
             </div>
           </div>
         </MaxWidthWrapper>
