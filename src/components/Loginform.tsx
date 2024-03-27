@@ -28,7 +28,6 @@ export default function Loginform({
   };
 
   const handleClick = async () => {
-    console.log(process.env.NEXT_PUBLIC_BASE_API_URL);
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/login`,
@@ -37,8 +36,6 @@ export default function Loginform({
           password,
         }
       );
-
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
