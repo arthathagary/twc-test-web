@@ -3,6 +3,9 @@
 import axios from "axios";
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import { useRouter } from "next/navigation";
+import useToken from "@/hooks/useToken";
+import Spinner from "./Spinner";
 
 interface LoginFormProps {
   isBtnClicked: boolean;
@@ -12,8 +15,10 @@ export default function Loginform({
   isBtnClicked,
   setIsBtnClicked,
 }: LoginFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (
     e: ChangeEvent<HTMLInputElement>
@@ -29,6 +34,7 @@ export default function Loginform({
 
   const handleClick = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/login`,
         {
@@ -36,8 +42,13 @@ export default function Loginform({
           password,
         }
       );
+      console.log(res.data);
+      localStorage.setItem("token", res.data.token);
+      router.push("/");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -65,10 +76,11 @@ export default function Loginform({
           </div>
           <div className="space-x-4 flex items-center text-btnTxt">
             <button
+              aria-disabled={isLoading}
               onClick={handleClick}
-              className=" border-white  border-2 rounded-full px-6 py-2 "
+              className=" border-white  border-2 rounded-full px-6 py-2 flex items-center gap-3"
             >
-              login
+              login {isLoading && <Spinner />}
             </button>
             <p>or</p>
             <p
