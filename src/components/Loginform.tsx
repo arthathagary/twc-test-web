@@ -1,10 +1,9 @@
 "use client";
 
-import axios from "axios";
-import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import axios from "axios";
 import { useRouter } from "next/navigation";
-import useToken from "@/hooks/useToken";
+import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import Spinner from "./Spinner";
 
 interface LoginFormProps {
@@ -32,7 +31,8 @@ export default function Loginform({
     setPassword(e.target.value);
   };
 
-  const handleClick = async () => {
+  const handleClick = async (e: any) => {
+    e.preventDefault();
     try {
       setIsLoading(true);
       const res = await axios.post(
@@ -55,44 +55,50 @@ export default function Loginform({
   return (
     <>
       <MaxWidthWrapper>
-        <div className="w-full max-w-[477px] text-white">
-          <h1 className="font-bold text-heading mb-2">Hi there,</h1>
-          <p className="text-para mb-8 max-w-[253px] leading-10">
-            Welcome to our contacts portal
-          </p>
-          <div className="flex flex-col gap-4 text-black">
-            <input
-              className="rounded-full  h-[55px] px-4 py-2 w-full text-black mb-4"
-              value={email}
-              onChange={handleEmail}
-              placeholder="email"
-            />
-            <input
-              className="rounded-full  h-[55px] px-4 py-2 w-full text-black mb-8"
-              value={password}
-              onChange={handlePassword}
-              placeholder="password"
-            />
-          </div>
-          <div className="space-x-4 flex items-center text-btnTxt">
-            <button
-              aria-disabled={isLoading}
-              onClick={handleClick}
-              className=" border-white  border-2 rounded-full px-6 py-2 flex items-center gap-3"
-            >
-              login {isLoading && <Spinner />}
-            </button>
-            <p>or</p>
-            <p
-              className="underline"
-              onClick={() => {
-                setIsBtnClicked(true);
-              }}
-            >
-              Click here to Register
+        <form onSubmit={handleClick}>
+          <div className="w-full max-w-[477px] text-white">
+            <h1 className="font-bold text-heading mb-2">Hi there,</h1>
+            <p className="text-para mb-8 max-w-[253px] leading-10">
+              Welcome to our contacts portal
             </p>
+            <div className="flex flex-col gap-4 text-black">
+              <input
+                type="email"
+                className="rounded-full  h-[55px] px-4 py-2 w-full text-black mb-4"
+                value={email}
+                onChange={handleEmail}
+                placeholder="email"
+                required
+              />
+              <input
+                type="password"
+                className="rounded-full  h-[55px] px-4 py-2 w-full text-black mb-12"
+                value={password}
+                onChange={handlePassword}
+                placeholder="password"
+                required
+              />
+            </div>
+            <div className="space-x-4 flex items-center text-btnTxt">
+              <button
+                aria-disabled={isLoading}
+                type="submit"
+                className=" border-white  border-2 rounded-full px-6 py-2 flex items-center gap-3"
+              >
+                login {isLoading && <Spinner />}
+              </button>
+              <p>or</p>
+              <p
+                className="underline"
+                onClick={() => {
+                  setIsBtnClicked(true);
+                }}
+              >
+                Click here to Register
+              </p>
+            </div>
           </div>
-        </div>
+        </form>
       </MaxWidthWrapper>
     </>
   );

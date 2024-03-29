@@ -5,14 +5,15 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import EclipseFemale from "@/public/assets/images/Ellipse_female.svg";
 import EclipseMale from "@/public/assets/images/Ellipse_male.svg";
 import axios from "axios";
-import { ChangeEvent, ChangeEventHandler, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
 
 import { IContactData } from "@/app/contacts/page";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Logout from "./Logout";
 import Modal from "./Modal";
+import jwt from "jsonwebtoken";
 
 interface ContactProps {
   data: IContactData[];
@@ -28,10 +29,6 @@ export default function Contacts({ data }: ContactProps) {
     Array(data.length).fill(false)
   );
 
-  // const isAuthenticated = useToken();
-  // if (!isAuthenticated) {
-  //   redirect("/login");
-  // }
   const [contact, setContact] = useState<IContactData>({
     fullname: "",
     email: "",
@@ -93,11 +90,37 @@ export default function Contacts({ data }: ContactProps) {
           gender: contact.gender,
         }
       );
+
+      setEditBtnClicked(editBtnClicked.map(() => false));
       router.refresh();
     } catch (error) {
       console.log(error);
     }
   };
+
+  const [isAuth, setIsAuth] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const decode = jwt.decode(token);
+      if (!decode) {
+        redirect("/login");
+      } else {
+        setIsAuth(true);
+      }
+    } else {
+      redirect("/login");
+    }
+  }, []);
+
+  if (!isAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen z-50">
+        Loading..
+      </div>
+    );
+  }
 
   return (
     <>
@@ -105,7 +128,7 @@ export default function Contacts({ data }: ContactProps) {
         <MaxWidthWrapper>
           <Logo className="pt-[72px]" />
           <ContactsPortal />
-          <div className="flex  items-center justify-between">
+          <div className="flex items-center justify-between mb-8">
             <h1 className="text-heading font-bold text-white mt-8">Contacts</h1>
             <div>
               <Link passHref href="/contacts/new">

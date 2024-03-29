@@ -1,17 +1,39 @@
 "use client";
+import jwt from "jsonwebtoken";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 import ContactsPortal from "./ContactsPortal";
 import Logo from "./Logo";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import useToken from "@/hooks/useToken";
-import { redirect, useRouter } from "next/navigation";
 import Logout from "./Logout";
+import MaxWidthWrapper from "./MaxWidthWrapper";
+import Spinner from "./Spinner";
 
 export default function Welcomescreen() {
-  const isAuthenticated = useToken();
-  if (!isAuthenticated) {
-    redirect("/login");
+  const [isAuth, setIsAuth] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const decode = jwt.decode(token);
+      if (!decode) {
+        redirect("/login");
+      } else {
+        setIsAuth(true);
+      }
+    } else {
+      redirect("/login");
+    }
+  }, []);
+
+  if (!isAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen z-50">
+        Loading..
+      </div>
+    );
   }
+
   return (
     <div className=" min-h-screen bg-bg-primary rounded-tr-[200px] rounded-bl-[200px] relative">
       <MaxWidthWrapper>

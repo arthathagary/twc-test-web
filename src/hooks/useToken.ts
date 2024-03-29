@@ -4,23 +4,22 @@ import jwt from "jsonwebtoken";
 const useToken = () => {
   const [token, setToken] = useState<null | undefined | string>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [decodedToken, setDecodedToken] = useState<any | null>(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       const decodedToken = jwt.decode(storedToken);
-      if (
-        decodedToken &&
-        typeof decodedToken !== "string" &&
-        decodedToken.exp! * 1000 > Date.now()
-      ) {
+      setDecodedToken(decodedToken);
+      console.log(decodedToken, "decodedToken");
+      if (decodedToken) {
         setIsAuthenticated(true);
       }
     }
     setToken(storedToken);
   }, []);
 
-  return isAuthenticated;
+  return [isAuthenticated, token, decodedToken];
 };
 
 export default useToken;

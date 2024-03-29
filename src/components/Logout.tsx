@@ -1,9 +1,15 @@
+import { useRouter } from "next/navigation";
+
 export default function Logout() {
+  const router = useRouter();
   return (
     <>
       <button
         className="text-btnTxt flex items-center gap-4  text-white absolute bottom-10 right-20 underline"
-        onClick={() => localStorage.removeItem("token")}
+        onClick={() => {
+          localStorage.removeItem("token");
+          router.push("/login");
+        }}
       >
         <div className="relative">
           <svg
