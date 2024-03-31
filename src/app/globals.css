@@ -17,13 +17,13 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-image: url("../../public/assets/images/bg_img.png");
+}
+
+.circle {
+  height: 100vh;
+  background: #093f46;
+  clip-path: circle(100vh at 5% 50%);
 }
 
 @layer utilities {
