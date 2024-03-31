@@ -20,14 +20,13 @@ const getContactData = async () => {
   const cookieStore = cookies();
   const token = cookieStore.get("token");
 
-  const decoded = jwt.decode(token!.value) as CustomJwtPayload;
-  const userId = decoded.id;
-
   if (!token) {
     return;
   }
 
   try {
+    const decoded = jwt.decode(token!.value) as CustomJwtPayload;
+    const userId = decoded.id;
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API_URL}/contacts/${userId}`,
       {

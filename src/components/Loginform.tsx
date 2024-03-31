@@ -46,7 +46,6 @@ export default function Loginform({
           withCredentials: true,
         }
       );
-      console.log(res.data);
       localStorage.setItem("token", res.data.token);
       router.push("/contacts");
     } catch (error) {
