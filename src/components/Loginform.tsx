@@ -52,7 +52,9 @@ export default function Loginform({
       if ((error as AxiosError).response) {
         const errorCode = (error as AxiosError).response?.status;
         if (errorCode === 400) {
-          setFetchErrors("Invalid email or password.");
+          setFetchErrors("Invalid email");
+        } else if (errorCode === 401) {
+          setFetchErrors("Password is incorrect.");
         } else {
           setFetchErrors("Some Errors Occured");
         }

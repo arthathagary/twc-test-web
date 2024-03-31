@@ -15,6 +15,7 @@ import {
 import Modal from "./Modal";
 import Logout from "./Logout";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import Spinner from "./Spinner";
 
 interface CustomJwtPayload extends JwtPayload {
   id: string;
@@ -108,7 +109,7 @@ export default function NewContact() {
   if (!isAuth) {
     return (
       <div className="flex justify-center items-center h-screen z-50">
-        Loading..
+        <Spinner color="#093F46" />
       </div>
     );
   }

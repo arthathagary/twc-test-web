@@ -14,6 +14,7 @@ import { redirect, useRouter } from "next/navigation";
 import Logout from "./Logout";
 import Modal from "./Modal";
 import jwt from "jsonwebtoken";
+import Spinner from "./Spinner";
 
 interface ContactProps {
   data: IContactData[];
@@ -129,7 +130,7 @@ export default function Contacts({ data }: ContactProps) {
   if (!isAuth) {
     return (
       <div className="flex justify-center items-center h-screen z-50">
-        Loading..
+        <Spinner color="#093F46" />
       </div>
     );
   }

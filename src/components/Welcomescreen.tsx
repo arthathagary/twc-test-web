@@ -29,7 +29,7 @@ export default function Welcomescreen() {
   if (!isAuth) {
     return (
       <div className="flex justify-center items-center h-screen z-50">
-        Loading..
+        <Spinner color="#093F46" />
       </div>
     );
   }
