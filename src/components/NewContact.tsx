@@ -103,7 +103,7 @@ export default function NewContact() {
     } else {
       redirect("/login");
     }
-  }, [accessToken, userId]); // Dependency array
+  }, [accessToken, userId]);
 
   if (!isAuth) {
     return (
@@ -193,7 +193,10 @@ export default function NewContact() {
       >
         <button
           className="text-[28px] bg-bg-primary text-white px-5 py-[10px] rounded-full"
-          onClick={() => router.push("/contacts")}
+          onClick={() => {
+            router.push("/contacts");
+            router.refresh();
+          }}
         >
           Okay
         </button>

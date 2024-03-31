@@ -3,6 +3,7 @@ import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import Spinner from "./Spinner";
 
 interface RegisterFormProps {
   isBtnClicked: boolean;
@@ -18,6 +19,7 @@ export default function Registerform({
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -77,6 +79,7 @@ export default function Registerform({
     }
 
     try {
+      setIsLoading(true);
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_API_URL}/register`,
         {
@@ -85,7 +88,7 @@ export default function Registerform({
         }
       );
 
-      router.refresh();
+      setIsBtnClicked(false);
     } catch (error) {
       if ((error as AxiosError).response) {
         const errorCode = (error as AxiosError).response?.status;
@@ -101,6 +104,8 @@ export default function Registerform({
         console.log(error);
         setFetchErrors("Some Errors Occured");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -149,9 +154,9 @@ export default function Registerform({
             onClick={handleClick}
             className={`${
               fetchErrors ? "mb-0" : "mb-12"
-            } text-btnTxt border-white border-2 rounded-full px-6 py-2`}
+            } text-btnTxt border-white border-2 rounded-full px-6 py-2 flex items-center gap-3`}
           >
-            Register
+            Register {isLoading && <Spinner />}
           </button>
           {fetchErrors && <p className="text-red-500 mb-8">{fetchErrors}</p>}
 

@@ -48,7 +48,7 @@ export default function Loginform({
       );
       console.log(res.data);
       localStorage.setItem("token", res.data.token);
-      router.push("/");
+      router.push("/contacts");
     } catch (error) {
       if ((error as AxiosError).response) {
         const errorCode = (error as AxiosError).response?.status;
@@ -104,7 +104,7 @@ export default function Loginform({
               </button>
               <p>or</p>
               <p
-                className="underline"
+                className="underline cursor-pointer"
                 onClick={() => {
                   setIsBtnClicked(true);
                 }}
