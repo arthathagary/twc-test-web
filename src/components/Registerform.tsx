@@ -1,7 +1,7 @@
 "use client";
 import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 interface RegisterFormProps {
@@ -24,6 +24,8 @@ export default function Registerform({
     confirmPassword: "",
   });
   const [trackError, setTrackError] = useState(false);
+
+  const [fetchErrors, setFetchErrors] = useState<null | string>(null);
 
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (
     e: ChangeEvent<HTMLInputElement>
@@ -82,9 +84,23 @@ export default function Registerform({
           password,
         }
       );
+
       router.refresh();
     } catch (error) {
-      console.log(error);
+      if ((error as AxiosError).response) {
+        const errorCode = (error as AxiosError).response?.status;
+        if (errorCode === 400 || errorCode === 401) {
+          setFetchErrors(
+            "Email already exists try different email or login instead"
+          );
+        } else {
+          setFetchErrors("Some Errors Occured");
+        }
+      } else {
+        // Handle other cases (no response, etc.)
+        console.log(error);
+        setFetchErrors("Some Errors Occured");
+      }
     }
   };
   return (
@@ -131,10 +147,14 @@ export default function Registerform({
         <div className="flex flex-col items-start gap-8">
           <button
             onClick={handleClick}
-            className="mb-12 text-btnTxt border-white border-2 rounded-full px-6 py-2 "
+            className={`${
+              fetchErrors ? "mb-0" : "mb-12"
+            } text-btnTxt border-white border-2 rounded-full px-6 py-2`}
           >
             Register
           </button>
+          {fetchErrors && <p className="text-red-500 mb-8">{fetchErrors}</p>}
+
           <button
             className="text-btnTxt"
             onClick={() => {

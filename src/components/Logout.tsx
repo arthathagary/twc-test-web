@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Logout() {
   const router = useRouter();
@@ -8,6 +9,8 @@ export default function Logout() {
         className="text-btnTxt flex items-center gap-4  text-white absolute bottom-10 right-20 underline"
         onClick={() => {
           localStorage.removeItem("token");
+          Cookies.remove("token");
+
           router.push("/login");
         }}
       >

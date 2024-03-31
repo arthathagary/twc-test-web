@@ -5,11 +5,20 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import useToken from "@/hooks/useToken";
 import axios from "axios";
 import { redirect, useRouter } from "next/navigation";
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  use,
+  useEffect,
+  useState,
+} from "react";
 import Modal from "./Modal";
 import Logout from "./Logout";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
+interface CustomJwtPayload extends JwtPayload {
+  id: string;
+}
 export default function NewContact() {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +28,15 @@ export default function NewContact() {
     phoneNumber: "",
     gender: "",
   });
+  const [accessToken, setAccessToken] = useState("");
+  const [userId, setUserId] = useState("");
+
+  // const decode = jwt.decode(accessToken) as CustomJwtPayload;
+  // if (decode && decode.id) {
+  //   setUserId(decode.id);
+  // } else {
+  //   console.log("JWT error: token is invalid or missing 'id' claim");
+  // }
 
   const handleName: ChangeEventHandler<HTMLInputElement> = (
     e: ChangeEvent<HTMLInputElement>
@@ -54,6 +72,12 @@ export default function NewContact() {
           email: contact.email,
           phonenumber: contact.phoneNumber,
           gender: contact.gender,
+          userId: userId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
       setShowModal(true);
@@ -67,8 +91,11 @@ export default function NewContact() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      const decode = jwt.decode(token);
-      if (!decode) {
+      setAccessToken(token);
+      const decode = jwt.decode(token) as CustomJwtPayload;
+      if (decode && decode.id && decode.id !== userId) {
+        setUserId(decode.id);
+      } else if (!decode) {
         redirect("/login");
       } else {
         setIsAuth(true);
@@ -76,7 +103,7 @@ export default function NewContact() {
     } else {
       redirect("/login");
     }
-  }, []);
+  }, [accessToken, userId]); // Dependency array
 
   if (!isAuth) {
     return (

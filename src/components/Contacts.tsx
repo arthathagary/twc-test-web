@@ -28,6 +28,7 @@ export default function Contacts({ data }: ContactProps) {
   const [editBtnClicked, setEditBtnClicked] = useState(
     Array(data.length).fill(false)
   );
+  const [accessToken, setAccessToken] = useState("");
 
   const [contact, setContact] = useState<IContactData>({
     fullname: "",
@@ -71,7 +72,12 @@ export default function Contacts({ data }: ContactProps) {
   const handleDelete = async (id: string) => {
     try {
       const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/contacts/${id}`
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/contacts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       router.refresh();
     } catch (error) {
@@ -88,6 +94,11 @@ export default function Contacts({ data }: ContactProps) {
           email: contact.email,
           phonenumber: contact.phonenumber,
           gender: contact.gender,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
 
@@ -103,6 +114,7 @@ export default function Contacts({ data }: ContactProps) {
     const token = localStorage.getItem("token");
 
     if (token) {
+      setAccessToken(token);
       const decode = jwt.decode(token);
       if (!decode) {
         redirect("/login");

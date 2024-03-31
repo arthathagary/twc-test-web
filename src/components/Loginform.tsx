@@ -1,7 +1,7 @@
 "use client";
 
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import Spinner from "./Spinner";
@@ -18,6 +18,7 @@ export default function Loginform({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [fetchErrors, setFetchErrors] = useState<null | string>(null);
 
   const handleEmail: ChangeEventHandler<HTMLInputElement> = (
     e: ChangeEvent<HTMLInputElement>
@@ -40,13 +41,27 @@ export default function Loginform({
         {
           email,
           password,
+        },
+        {
+          withCredentials: true,
         }
       );
       console.log(res.data);
       localStorage.setItem("token", res.data.token);
       router.push("/");
     } catch (error) {
-      console.log(error);
+      if ((error as AxiosError).response) {
+        const errorCode = (error as AxiosError).response?.status;
+        if (errorCode === 400) {
+          setFetchErrors("Invalid email or password.");
+        } else {
+          setFetchErrors("Some Errors Occured");
+        }
+      } else {
+        // Handle other cases (no response, etc.)
+        console.log(error);
+        setFetchErrors("Some Errors Occured");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -97,6 +112,7 @@ export default function Loginform({
                 Click here to Register
               </p>
             </div>
+            {fetchErrors && <p className="text-red-500 mt-4">{fetchErrors}</p>}
           </div>
         </form>
       </MaxWidthWrapper>
